@@ -65,9 +65,9 @@ curl -X POST <api-endpoint>/courses/<courseId> \
 **Response Example:**
 ```json
 {
-  "totalModulesStudied": {number},
-  "timeStudied": {number},
-  "averageScore": {number}
+  "totalModulesStudied": 10,
+  "timeStudied": 120,
+  "averageScore": 88
 }
 ```
 
@@ -89,10 +89,10 @@ curl -X GET <api-endpoint>/courses/<courseId> \
 **Response Example:**
 ```json
 {
-  "sessionId": "{uuid-value}",
-  "totalModulesStudied": {number},
-  "timeStudied": {number},
-  "averageScore": {number}
+  "sessionId": "123e4567-e89b-12d3-a456-426614174000",
+  "totalModulesStudied": 5,
+  "timeStudied": 60,
+  "averageScore": 92
 }
 ```
 
