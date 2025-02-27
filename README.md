@@ -46,15 +46,28 @@ A serverless API built with Express.js to track user statistics for a particular
 **Request Body:**
 ```json
 {
-  "sessionId": "uuid-value", // Optional: If not provided, it will be generated automatically
-  "totalModulesStudied": 5,
-  "timeStudied": 120,
-  "averageScore": 85.5
+  "sessionId": "<uuid-value>", // Optional: If not provided, it will be generated automatically
+  "totalModulesStudied": <number>,
+  "timeStudied": <number>,
+  "averageScore": <number>
 }
 ```
 
 **Headers:**
 - `userId`: The unique user ID (required)
+
+**Example Request**
+```sh
+curl -X POST <api-endpoint>/courses/<courseId> \
+  -H "Content-Type: application/json" \
+  -H "userId: <userId>" \
+  -d '{
+    "sessionId": "<uuid-value>",
+    "totalModulesStudied": <number>,
+    "timeStudied": <number>,
+    "averageScore": <number>
+  }'
+```
 
 ### **2. Fetch course lifetime stats**
 **GET** `/courses/{courseId}`
@@ -62,14 +75,20 @@ A serverless API built with Express.js to track user statistics for a particular
 **Response Example:**
 ```json
 {
-  "totalModulesStudied": 50,
-  "timeStudied": 600,
-  "averageScore": 87.3
+  "totalModulesStudied": <number>,
+  "timeStudied": <number>,
+  "averageScore": <number>
 }
 ```
 
 **Headers:**
 - `userId`: The unique user ID (required)
+
+**Example Request**
+```sh
+curl -X GET <api-endpoint>/courses/<courseId> \
+  -H "userId: <userId>"
+```
 
 ### **3. Fetch a single learning session**
 **GET** `/courses/{courseId}/sessions/{sessionId}`
@@ -77,66 +96,88 @@ A serverless API built with Express.js to track user statistics for a particular
 **Response Example:**
 ```json
 {
-  "sessionId": "uuid-value",
-  "totalModulesStudied": 5,
-  "timeStudied": 120,
-  "averageScore": 85.5
+  "sessionId": "<uuid-value>",
+  "totalModulesStudied": <number>,
+  "timeStudied": <number>,
+  "averageScore": <number>
 }
 ```
 
 **Headers:**
 - `userId`: The unique user ID (required)
 
+**Example Request**
+```sh
+curl -X GET <api-endpoint>/courses/<courseId>/sessions/<sessionId> \
+  -H "userId: <userId>"
+```
+
 ---
 
-## Running Locally
+## Installation
 
 ### Prerequisites
 - Node.js & npm
-- `serverless` CLI (`npm install -g serverless`)
-- AWS CLI (configured with credentials)
-- Docker (for running DynamoDB Local)
-- `ts-node` (`npm install -g ts-node`)
 
-### 1. Start DynamoDB Local
-Run the following command to start a local instance of DynamoDB:
-```sh
-docker run -p 8000:8000 amazon/dynamodb-local
-```
-
-### 2. Set Up Environment Variables
-Create a `.env` file in the project root with the following content:
-```env
-USE_LOCAL_DYNAMODB=true
-```
-
-### 3. Create DynamoDB Table
-Run the following command to create the required table:
-```sh
-ts-node src/config/createTable.ts
-```
-
-### 4. Start the API Server Locally
+### Steps
+#### 1. Install dependencies
+Before deploying or running locally, install the necessary dependencies:
 ```sh
 npm install
-npm run dev
 ```
-
-The server should now be running locally.
 
 ---
 
 ## Deploying to AWS
 
-Ensure your AWS credentials are properly configured:
+### Prerequisites
+- `serverless` CLI (`npm install -g serverless`)
+- AWS CLI (configured with credentials)
+
+### Steps
+#### 1. Ensure your AWS credentials are properly configured:
 ```sh
 aws configure
 ```
-Then, deploy the service using Serverless Framework:
+#### 2. Deploy the service using Serverless Framework:
 ```sh
 serverless deploy
 ```
 Once deployed, Serverless will provide the API Gateway endpoint for accessing your API.
+
+---
+
+## Running Locally
+
+### Prerequisites
+- Docker (for running DynamoDB Local)
+- `ts-node` (`npm install -g ts-node`)
+
+### Steps
+#### 1. Start DynamoDB Local
+Run the following command to start a local instance of DynamoDB:
+```sh
+docker run -p 8000:8000 amazon/dynamodb-local
+```
+
+#### 2. Set Up Environment Variables
+Create a `.env` file in the project root with the following content:
+```env
+USE_LOCAL_DYNAMODB=true
+```
+
+#### 3. Create DynamoDB Table
+Run the following command to create the required table:
+```sh
+ts-node src/config/createTable.ts
+```
+
+#### 4. Start the API Server Locally
+```sh
+npm run dev
+```
+
+The server should now be running locally.
 
 ---
 
@@ -153,7 +194,6 @@ npm test
 
 - The `serverless.yml` configuration is set up to deploy the service as AWS Lambda functions.
 - The API is stateless; all session statistics are stored in DynamoDB.
-- When running locally, be sure to use DynamoDB Local to avoid interacting with production data.
 
 ---
 
