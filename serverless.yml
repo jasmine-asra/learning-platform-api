@@ -1,0 +1,50 @@
+service: stats-service
+
+custom:
+  tableName: "stats-table-${sls:stage}"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [StatsTable, Arn]
+  environment:
+    STATS_TABLE: ${self:custom.tableName}
+
+functions:
+  api:
+    handler: src/lambda.handler
+    events:
+      - httpApi: "*"
+
+plugins:
+  - serverless-offline
+
+resources:
+  Resources:
+    StatsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: sessionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: sessionId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableName}
