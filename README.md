@@ -40,23 +40,13 @@ A serverless API built with Express.js to track user statistics for a particular
 
 ## API Endpoints
 
+### Common Headers (for all requests):
+- `userId`: The unique user ID (required)
+
 ### **1. Persist a study session**
 **POST** `/courses/{courseId}`
 
-**Request Body:**
-```json
-{
-  "sessionId": "<uuid-value>", // Optional: If not provided, it will be generated automatically
-  "totalModulesStudied": <number>,
-  "timeStudied": <number>,
-  "averageScore": <number>
-}
-```
-
-**Headers:**
-- `userId`: The unique user ID (required)
-
-**Example Request**
+**Request Example**
 ```sh
 curl -X POST <api-endpoint>/courses/<courseId> \
   -H "Content-Type: application/json" \
@@ -75,14 +65,17 @@ curl -X POST <api-endpoint>/courses/<courseId> \
 **Response Example:**
 ```json
 {
-  "totalModulesStudied": <number>,
-  "timeStudied": <number>,
-  "averageScore": <number>
+  "totalModulesStudied": {number},
+  "timeStudied": {number},
+  "averageScore": {number}
 }
 ```
 
-**Headers:**
-- `userId`: The unique user ID (required)
+**Request Example**
+```sh
+curl -X GET <api-endpoint>/courses/<courseId> \
+  -H "userId: <userId>"
+```
 
 **Example Request**
 ```sh
@@ -96,17 +89,14 @@ curl -X GET <api-endpoint>/courses/<courseId> \
 **Response Example:**
 ```json
 {
-  "sessionId": "<uuid-value>",
-  "totalModulesStudied": <number>,
-  "timeStudied": <number>,
-  "averageScore": <number>
+  "sessionId": "{uuid-value}",
+  "totalModulesStudied": {number},
+  "timeStudied": {number},
+  "averageScore": {number}
 }
 ```
 
-**Headers:**
-- `userId`: The unique user ID (required)
-
-**Example Request**
+**Request Example**
 ```sh
 curl -X GET <api-endpoint>/courses/<courseId>/sessions/<sessionId> \
   -H "userId: <userId>"
@@ -115,9 +105,23 @@ curl -X GET <api-endpoint>/courses/<courseId>/sessions/<sessionId> \
 ---
 
 ## Installation
+## Installation
 
 ### Prerequisites
 - Node.js & npm
+
+### Steps
+#### 1. Install dependencies
+Before deploying or running locally, install the necessary dependencies:
+```sh
+npm install
+```
+
+---
+
+## Deploying to AWS
+
+### Prerequisites
 
 ### Steps
 #### 1. Install dependencies
@@ -155,11 +159,14 @@ Once deployed, Serverless will provide the API Gateway endpoint for accessing yo
 
 ### Steps
 #### 1. Start DynamoDB Local
+### Steps
+#### 1. Start DynamoDB Local
 Run the following command to start a local instance of DynamoDB:
 ```sh
 docker run -p 8000:8000 amazon/dynamodb-local
 ```
 
+#### 2. Set Up Environment Variables
 #### 2. Set Up Environment Variables
 Create a `.env` file in the project root with the following content:
 ```env
@@ -167,11 +174,13 @@ USE_LOCAL_DYNAMODB=true
 ```
 
 #### 3. Create DynamoDB Table
+#### 3. Create DynamoDB Table
 Run the following command to create the required table:
 ```sh
 ts-node src/config/createTable.ts
 ```
 
+#### 4. Start the API Server Locally
 #### 4. Start the API Server Locally
 ```sh
 npm run dev
