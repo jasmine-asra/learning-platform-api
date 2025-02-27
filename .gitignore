@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+
+# Build artifacts
+.serverless/
+coverage/
+
+# Local database files
+dynamodb/
+
+# Environment variables
+.env
+
+# Logs and temporary files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+
+# Jest cache and test output
+jest-cache/
+jest-output/
+__tests__/coverage/
