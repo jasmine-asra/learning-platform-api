@@ -45,7 +45,7 @@ A serverless API built with Express.js to track user statistics for a particular
 - `userId`: The unique user ID (required)
 
 ### **1. Persist a study session**
-**POST** `/courses/{courseId}`
+**POST** `/courses/{courseId}/sessions`
 
 **Request Example**
 ```sh
@@ -61,7 +61,7 @@ curl -X POST <api-endpoint>/courses/<courseId> \
 ```
 
 ### **2. Fetch course lifetime stats**
-**GET** `/courses/{courseId}`
+**GET** `/courses/{courseId}/stats`
 
 **Response Example:**
 ```json
@@ -179,6 +179,12 @@ npm test
 
 - The `serverless.yml` configuration is set up to deploy the service as AWS Lambda functions.
 - The API is stateless; all session statistics are stored in DynamoDB.
+
+---
+
+## Changes to Schema
+
+- Altered API routes to be more RESTful
 
 ---
 
