@@ -19,9 +19,9 @@ app.use(logger);
 // Routes
 const router = express.Router();
 
-router.post("/:courseId", createSession);
-router.get("/:courseId", getCourseStats);
+router.post("/:courseId/sessions", createSession);
 router.get("/:courseId/sessions/:sessionId", getSessionStats);
+router.get("/:courseId/stats", getCourseStats);
 
 app.use("/courses", router);
 
