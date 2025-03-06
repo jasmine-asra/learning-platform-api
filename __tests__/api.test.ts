@@ -13,13 +13,13 @@ describe('API Routes', () => {
     expect(response.text).toBe('API is running!');
   });
 
-  it('should access POST /courses/:courseId', async () => {
+  it('should access POST /courses/:courseId/sessions', async () => {
     const mockCreateSession = jest.spyOn(sessionController, 'createSession').mockImplementation(async (req, res, next) => {
       res.status(201).send();
     });
 
     const response = await request(app)
-      .post('/courses/1')
+      .post('/courses/1/sessions')
       .send({ 
         totalModulesStudied: 1,
         timeStudied: 15,
@@ -30,12 +30,12 @@ describe('API Routes', () => {
     expect(mockCreateSession).toHaveBeenCalled();
   });
 
-  it('should access GET /courses/:courseId', async () => {
+  it('should access GET /courses/:courseId/stats', async () => {
     const mockGetCourseStats = jest.spyOn(courseController, 'getCourseStats').mockImplementation(async (req, res, next) => {
       res.status(200).send();
     });
 
-    const response = await request(app).get('/courses/1');
+    const response = await request(app).get('/courses/1/stats');
     expect(response.status).toBe(200);
     expect(mockGetCourseStats).toHaveBeenCalled();
   });
